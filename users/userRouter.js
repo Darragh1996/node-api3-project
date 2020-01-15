@@ -32,6 +32,7 @@ router.get("/", (req, res) => {
 
 router.get("/:id", validateUserId, (req, res) => {
   // do your magic!
+  console.log(req.user);
   res.status(200).json(req.user);
 });
 
@@ -75,11 +76,15 @@ function validateUserId(req, res, next) {
   // do your magic!
   Users.getById(req.params.id)
     .then(user => {
-      req.user = user;
-      next();
+      if (user) {
+        req.user = user;
+        next();
+      } else {
+        res.status(200).json({ message: "invalid user id" });
+      }
     })
     .catch(err => {
-      res.status(200).json({ message: "something went wrong" });
+      res.status(500).json({ message: "something went wrong" });
     });
 }
 
