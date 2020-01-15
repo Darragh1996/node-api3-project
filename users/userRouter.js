@@ -6,6 +6,13 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
   // do your magic!
+  Users.insert(req.body)
+    .then(newUser => {
+      res.status(200).json(newUser);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
 });
 
 router.post("/:id/posts", (req, res) => {
@@ -25,6 +32,13 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   // do your magic!
+  Users.getById(req.params.id)
+    .then(user => {
+      res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
 });
 
 router.get("/:id/posts", (req, res) => {
@@ -41,10 +55,24 @@ router.get("/:id/posts", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   // do your magic!
+  Users.remove(req.params.id)
+    .then(confirm => {
+      res.status(200).json(confirm);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
 });
 
 router.put("/:id", (req, res) => {
   // do your magic!
+  Users.update(req.params.id, req.body)
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
 });
 
 //custom middleware
