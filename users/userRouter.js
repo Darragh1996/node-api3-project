@@ -30,15 +30,9 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateUserId, (req, res) => {
   // do your magic!
-  Users.getById(req.params.id)
-    .then(user => {
-      res.status(200).json(user);
-    })
-    .catch(err => {
-      res.status(500).json({ message: "something went wrong", error: err });
-    });
+  res.status(200).json(req.user);
 });
 
 router.get("/:id/posts", (req, res) => {
@@ -79,6 +73,14 @@ router.put("/:id", (req, res) => {
 
 function validateUserId(req, res, next) {
   // do your magic!
+  Users.getById(req.params.id)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      res.status(200).json({ message: "something went wrong" });
+    });
 }
 
 function validateUser(req, res, next) {
