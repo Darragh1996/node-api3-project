@@ -15,10 +15,6 @@ router.post("/", validateUser, (req, res) => {
     });
 });
 
-router.post("/:id/posts", (req, res) => {
-  // do your magic!
-});
-
 router.get("/", (req, res) => {
   // do your magic!
   Users.get()
@@ -97,10 +93,6 @@ function validateUser(req, res, next) {
   } else {
     next();
   }
-}
-
-function validatePost(req, res, next) {
-  // do your magic!
 }
 
 module.exports = router;

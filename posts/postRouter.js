@@ -26,17 +26,46 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+  // do your magic!
+  Posts.insert(req.body)
+    .then(newPost => {
+      res.status(200).json(newPost);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
+});
+
 router.delete("/:id", (req, res) => {
   // do your magic!
+  Posts.remove(req.params.id)
+    .then(confirm => {
+      res.status(200).json({ confirm, message: "successfully deleted post" });
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
 });
 
 router.put("/:id", (req, res) => {
   // do your magic!
+  Posts.update(req.params.id, req.body)
+    .then(newPost => {
+      res.status(200).json(newPost);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "something went wrong", error: err });
+    });
 });
 
 // custom middleware
 
 function validatePostId(req, res, next) {
+  // do your magic!
+}
+
+function validatePost(req, res, next) {
   // do your magic!
 }
 
