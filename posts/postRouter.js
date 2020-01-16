@@ -26,7 +26,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", validatePost, (req, res) => {
   // do your magic!
   Posts.insert(req.body)
     .then(newPost => {
@@ -67,6 +67,14 @@ function validatePostId(req, res, next) {
 
 function validatePost(req, res, next) {
   // do your magic!
+  console.log("inside validatePost");
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({ message: "missing post data" });
+  } else if (!req.body.text || !req.body.user_id) {
+    res.status(400).json({ message: "please include text and user_id" });
+  } else {
+    next();
+  }
 }
 
 module.exports = router;
