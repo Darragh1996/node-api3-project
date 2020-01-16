@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validatePostId, (req, res) => {
   // do your magic!
   Posts.getById(req.params.id)
     .then(post => {
@@ -37,7 +37,7 @@ router.post("/", validatePost, (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validatePostId, (req, res) => {
   // do your magic!
   Posts.remove(req.params.id)
     .then(confirm => {
@@ -48,7 +48,7 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validatePostId, (req, res) => {
   // do your magic!
   Posts.update(req.params.id, req.body)
     .then(newPost => {
@@ -63,6 +63,22 @@ router.put("/:id", (req, res) => {
 
 function validatePostId(req, res, next) {
   // do your magic!
+  console.log("inside validatePostId");
+  if (!req.params.id) {
+    res.status(404).json({ message: "no id detected" });
+  } else {
+    Posts.getById(req.params.id)
+      .then(post => {
+        if (!post) {
+          res.status(404).json({ message: "id not in database" });
+        } else {
+          next();
+        }
+      })
+      .catch(err => {
+        res.status(500).json({ message: "something went wrong" });
+      });
+  }
 }
 
 function validatePost(req, res, next) {
